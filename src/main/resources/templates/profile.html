@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile Page</title>
+    <link rel="stylesheet" th:href="@{/styles/reset.css}"
+          href="../static/styles/reset.css">
+    <link th:insert="fragments/navbar.html :: navbarStyle" >
+    <link th:insert="fragments/footer.html :: footerStyle" >
+    <link rel="stylesheet" th:href="@{/styles/profile.css}"
+          href="../static/styles/profile.css">
+</head>
+<body>
+<nav th:replace="fragments/navbar.html :: header"> </nav>
+<header>
+    <div>
+        <img src="../static/images/profile.png" th:src="@{/images/profile.png}" th:alt="${username}" alt="">
+        <p th:text="${username}"></p>
+    </div>
+    <div>
+        <p th:text="'First Name: ' + ${firstName}"></p>
+        <p th:text="'Last Name: ' + ${lastName}"></p>
+        <p th:text="'Date Of Birth: ' + ${date}"></p>
+    </div>
+    <div>
+        <h3>Bio</h3>
+        <p th:text="${bio}"></p>
+    </div>
+    <div th:if="${showPostForm}">
+        <form method="POST" th:action="@{'/posts/' + ${id}}">
+            <label for="body">Body</label>
+            <textarea id="body" name="body" required rows="8" cols="55"></textarea>
+            <input type="submit" value="Add Post">
+        </form>
+    </div>
+</header>
+
+<main th:if="${posts.size() > 0}">
+
+    <div th:each="post : ${posts}">
+        <p th:text="${post.body}"></p>
+    </div>
+
+</main>
+<main th:unless="${posts.size() > 0}">
+    <p>There are no posts yet, You can write a post by filling in the form above</p>
+</main>
+<footer th:replace="fragments/footer.html :: footer"> </footer>
+</body>
+</html>

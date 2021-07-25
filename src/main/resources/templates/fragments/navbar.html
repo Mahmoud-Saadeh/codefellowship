@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <link th:fragment="navbarStyle" rel="stylesheet" th:href="@{/styles/navbar.css}"
+          href="../../static/styles/navbar.css">
+
+</head>
+<body>
+<nav th:fragment="header">
+    <h1><a href="/">CodeFellowship</a></h1>
+
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/users">Users</a></li>
+        <li sec:authorize="isAuthenticated()"><a href="/profile">Profile</a></li>
+        <li sec:authorize="!isAuthenticated()"><a href="/login"><button>Login</button></a></li>
+        <li sec:authorize="!isAuthenticated()"><a href="/signup"><button>Signup</button></a></li>
+        <li sec:authorize="isAuthenticated()"><a href="/logout"><button>Logout</button></a></li>
+        <li sec:authorize="isAuthenticated()" sec:authentication="name"></li>
+    </ul>
+</nav>
+</body>
+</html>

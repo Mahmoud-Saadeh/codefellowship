@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head >
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" th:href="@{/styles/reset.css}"
+          href="../static/styles/reset.css">
+    <link th:insert="fragments/navbar.html :: navbarStyle" >
+    <link th:insert="fragments/footer.html :: footerStyle" >
+    <link rel="stylesheet" th:href="@{/styles/home.css}"
+          href="../static/styles/home.css">
+</head>
+<body>
+    <nav th:replace="fragments/navbar.html :: header"> </nav>
+    <main>
+        <div>
+            <h2>Basic Information About The Site</h2>
+            <p>In this website there are 4 pages Home, Users, Login, Signup pages, </p>
+            <p>The Users page contain a list of all the users in the website, </p>
+            <p>The Login page allow the registered users to login </p>
+            <p>and the Signup page allow you to register to the website. </p>
+            <p>When you successfully register you can add posts by going to your profile and fill in the form </p>
+        </div>
+    </main>
+
+    <footer th:replace="fragments/footer.html :: footer"> </footer>
+
+</body>
+</html>

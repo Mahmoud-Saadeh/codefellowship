@@ -1,0 +1,73 @@
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+header img{
+    width: 110px;
+    height: 110px;
+    border-radius: 10px;
+}
+
+main{
+    min-height: 600px;
+}
+
+header div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    word-break: break-word;
+    width: 15%;
+
+}
+header div:last-child{
+    width: 55%;
+}
+header div h3{
+    font-size: 20px;
+    font-weight: bold;
+}
+header div >*{
+    margin-bottom: 10px;
+}
+
+header form input{
+    display: block;
+    text-align: center;
+    margin: 10px auto;
+    width: 200px;
+    border: none;
+    border-radius: 10px;
+    height: 30px;
+    font-size: 20px;
+    color: white;
+    background-color: blueviolet;
+}
+header label{
+    display: block;
+}
+header textarea{
+    margin-top: 10px;
+}
+
+main {
+    margin: 20px auto;
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    flex: 1;
+    word-break: break-word;
+}
+
+main div{
+    background-color: white;
+    border-radius: 20px;
+    height: fit-content;
+    flex-basis: 200px;
+    text-align: center;
+    padding: 15px;
+}
