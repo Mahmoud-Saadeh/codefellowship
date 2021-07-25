@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Sign Up Page</title>
+        <link rel="stylesheet" th:href="@{/styles/reset.css}"
+              href="../static/styles/reset.css">
+        <link th:insert="fragments/navbar.html :: navbarStyle" >
+        <link th:insert="fragments/footer.html :: footerStyle" >
+        <link rel="stylesheet" th:href="@{/styles/form.css}"
+              href="../static/styles/form.css">
+    </head>
+    <body>
+    <nav th:replace="fragments/navbar.html :: header"> </nav>
+    <main>
+        <h3>Signup</h3>
+        <form method="POST" th:action="@{/signup}">
+            <div><label for="username">Username: <input id="username" name="username" type="text" required></label></div>
+            <div><label for="password">Password: <input id="password" name="password" type="password" required></label></div>
+            <div><label for="firstName">First Name: <input id="firstName" name="firstName" type="text" required></label></div>
+            <div><label for="lastName">Last Name: <input id="lastName" name="lastName" type="text" required></label></div>
+            <div><label for="bio">Bio: <input id="bio" name="bio" type="text"></label></div>
+            <div><label for="dateOfBirth">Date Of Birth: <input id="dateOfBirth" name="dateOfBirth" type="date" required></label></div>
+            <div><input type="submit" value="Submit"/></div>
+        </form>
+    </main>
+
+
+    <footer th:replace="fragments/footer.html :: footer"> </footer>
+    </body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Users</title>
+    <link rel="stylesheet" th:href="@{/styles/reset.css}"
+          href="../static/styles/reset.css">
+    <link th:insert="fragments/navbar.html :: navbarStyle">
+    <link th:insert="fragments/footer.html :: footerStyle" >
+    <link rel="stylesheet" th:href="@{/styles/users.css}"
+          href="../static/styles/users.css">
+</head>
+<body>
+    <nav th:replace="fragments/navbar.html :: header"> </nav>
+
+    <main th:if="${users.size() > 0}">
+
+            <div th:each="user : ${users}">
+                <a th:href="'/user/' + ${user.id}">
+                    <span><img src="../static/images/profile.png" th:src="@{/images/profile.png}" th:alt="${user.firstName}" alt=""></span>
+                    <span th:text="${user.firstName} + ' ' + ${user.lastName}"></span>
+                </a>
+            </div>
+
+    </main>
+    <main th:unless="${users.size() > 0}">
+        <p>There are no users yet, You can signup from <a href="/signup">here</a></p>
+    </main>
+
+    <footer th:replace="fragments/footer.html :: footer"> </footer>
+</body>
+</html>
