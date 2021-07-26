@@ -5,6 +5,8 @@
     <title>Profile Page</title>
     <link rel="stylesheet" th:href="@{/styles/reset.css}"
           href="../static/styles/reset.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link th:insert="fragments/navbar.html :: navbarStyle" >
     <link th:insert="fragments/footer.html :: footerStyle" >
     <link rel="stylesheet" th:href="@{/styles/profile.css}"
@@ -12,39 +14,67 @@
 </head>
 <body>
 <nav th:replace="fragments/navbar.html :: header"> </nav>
-<header>
-    <div>
-        <img src="../static/images/profile.png" th:src="@{/images/profile.png}" th:alt="${username}" alt="">
-        <p th:text="${username}"></p>
+<!--<header>-->
+    <div class="container">
+        <div class="row" th:if="${showError == true}">
+            <div class="alert alert-danger" role="alert" th:text="${errorPassword}">
+
+            </div>
+        </div>
+        <div class="row" th:if="${showError == false}">
+            <div class="alert alert-success" role="alert">
+                Your password has been changed.
+            </div>
+        </div>
+        <div class="row">
+            <div class="col profile-image">
+                <img src="../static/images/profile.png" th:src="@{/images/profile.png}" th:alt="${username}" alt="">
+                <p th:text="${username}"></p>
+                <div th:if="${showPostForm}">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Edit Profile</button>
+                    <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal2">Change Password</button>
+                </div>
+            </div>
+            <div class="col">
+                <p th:text="'First Name: ' + ${firstName}"></p>
+                <p th:text="'Last Name: ' + ${lastName}"></p>
+                <p th:text="'Date Of Birth: ' + ${date}"></p>
+
+            </div>
+            <div class="col">
+                <h3>Bio</h3>
+                <p th:text="${bio}"></p>
+            </div>
+            <div th:if="${showPostForm}" class="col">
+                <form method="POST" th:action="@{'/posts/' + ${id}}">
+<!--                    <h3><label for="body">Body</label></h3>-->
+<!--                    <textarea id="body" name="body" required rows="8" cols="55"></textarea>-->
+                    <div class="mb-3">
+                        <label for="body" class="form-label">Post Body</label>
+                        <textarea class="form-control" id="body" name="body" rows="3" cols="40"></textarea>
+                    </div>
+                    <input type="submit" class="btn btn-primary" value="Add Post">
+                </form>
+            </div>
+        </div>
     </div>
-    <div>
-        <p th:text="'First Name: ' + ${firstName}"></p>
-        <p th:text="'Last Name: ' + ${lastName}"></p>
-        <p th:text="'Date Of Birth: ' + ${date}"></p>
-    </div>
-    <div>
-        <h3>Bio</h3>
-        <p th:text="${bio}"></p>
-    </div>
-    <div th:if="${showPostForm}">
-        <form method="POST" th:action="@{'/posts/' + ${id}}">
-            <label for="body">Body</label>
-            <textarea id="body" name="body" required rows="8" cols="55"></textarea>
-            <input type="submit" value="Add Post">
-        </form>
-    </div>
-</header>
+<!--</header>-->
+<div th:replace="fragments/modals.html :: editProfileModal(id=${id})"> </div>
+<div th:replace="fragments/modals.html :: changePassword(id=${id})"> </div>
 
 <main th:if="${posts.size() > 0}">
-
-    <div th:each="post : ${posts}">
-        <p th:text="${post.body}"></p>
+    <div class="card" style="width: 18rem;" th:each="post : ${posts}">
+        <div class="card-body">
+            <p class="card-text" th:text="'Created at: ' +${post.getFormattedDate()}"></p>
+            <p class="card-text" th:text="${post.body}"></p>
+        </div>
     </div>
-
 </main>
 <main th:unless="${posts.size() > 0}">
-    <p>There are no posts yet, You can write a post by filling in the form above</p>
+    <p>There are no posts yet<span th:if="${showPostForm}">, You can write a post by filling in the form above</span><span th:unless="${showPostForm}">.</span>
+    </p>
 </main>
 <footer th:replace="fragments/footer.html :: footer"> </footer>
+
 </body>
 </html>

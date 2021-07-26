@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!--EDIT PROFILE-->
+<div th:fragment="editProfileModal(id)" class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit Profile</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form method="POST" th:action="@{'/edituser/' + ${id}}">
+          <div class="mb-3">
+            <label for="username" class="col-form-label">Username:</label>
+            <input type="text" class="form-control" id="username" name="username">
+          </div>
+          <div class="mb-3">
+            <label for="firstName" class="col-form-label">First Name</label>
+            <input type="text" class="form-control" id="firstName" name="firstName" required placeholder="your firstName">
+          </div>
+          <div class="mb-3">
+            <label for="lastName" class="col-form-label">Last Name</label>
+            <input type="text" class="form-control" id="lastName" name="lastName" required placeholder="your lastName">
+          </div>
+          <div class="mb-3">
+            <label for="bio" class="col-form-label">Bio</label>
+            <input type="text" class="form-control" id="bio" name="bio" required placeholder="your bio">
+          </div>
+          <div class="mb-3">
+            <label for="dateOfBirth" class="col-form-label">Date Of Birth</label>
+            <input type="date" class="form-control" id="dateOfBirth" name="dateOfBirth" required>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!--CHANGE PASSWORD-->
+<div th:fragment="changePassword(id)" class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel2">Edit Profile</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form method="POST" th:action="@{'/editpassword/' + ${id}}">
+          <div class="mb-3">
+            <label for="currentPassword" class="col-form-label">Current Password</label>
+            <input type="text" class="form-control" id="currentPassword" name="currentPassword">
+          </div>
+          <div class="mb-3">
+            <label for="newPassword" class="col-form-label">New Password</label>
+            <input type="text" class="form-control" id="newPassword" name="newPassword">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+</body>
+</html>
