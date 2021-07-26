@@ -1,10 +1,12 @@
 package com.example.codefellowship.domain;
 
 import javax.persistence.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity
-public class Post {
+public class Post{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -47,6 +49,11 @@ public class Post {
 
     public Date getDate() {
         return date;
+    }
+
+    public String getFormattedDate(){
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        return dateFormat.format(date);
     }
 
     public void setDate(Date date) {

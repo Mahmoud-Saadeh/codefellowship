@@ -45,13 +45,12 @@ public class authController {
                                       @RequestParam String dateOfBirth) throws ParseException {
         SimpleDateFormat formatter2 = new SimpleDateFormat("yyyy-MM-dd");
         Date date=formatter2.parse(dateOfBirth);
-        System.out.println(date + "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         ApplicationUser newApplicationUser = new ApplicationUser(encoder.encode(password),username,firstName,lastName,bio,date);
         newApplicationUser = applicationUserRepo.save(newApplicationUser);
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(newApplicationUser, null, new ArrayList<>());
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        return new RedirectView("/");
+        return new RedirectView("/myprofile");
     }
 }
