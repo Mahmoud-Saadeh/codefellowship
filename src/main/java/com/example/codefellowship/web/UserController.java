@@ -50,7 +50,7 @@ public class UserController {
         List<Post> posts = applicationUser.getPosts();
 //        posts.sort(Comparator.comparing(Post::getDate));
         posts.sort((o1,o2) -> o2.getDate().compareTo(o1.getDate()));
-        
+
         model.addAttribute("username", applicationUser.getUsername());
         model.addAttribute("firstName", applicationUser.getFirstName());
         model.addAttribute("lastName", applicationUser.getLastName());
