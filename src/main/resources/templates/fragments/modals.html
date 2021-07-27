@@ -58,11 +58,11 @@
         <form method="POST" th:action="@{'/editpassword/' + ${id}}">
           <div class="mb-3">
             <label for="currentPassword" class="col-form-label">Current Password</label>
-            <input type="text" class="form-control" id="currentPassword" name="currentPassword">
+            <input type="password" class="form-control" id="currentPassword" name="currentPassword">
           </div>
           <div class="mb-3">
             <label for="newPassword" class="col-form-label">New Password</label>
-            <input type="text" class="form-control" id="newPassword" name="newPassword">
+            <input type="password" class="form-control" id="newPassword" name="newPassword">
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

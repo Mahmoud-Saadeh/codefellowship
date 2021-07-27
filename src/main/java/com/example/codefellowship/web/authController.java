@@ -1,7 +1,9 @@
 package com.example.codefellowship.web;
 
 import com.example.codefellowship.domain.ApplicationUser;
+import com.example.codefellowship.domain.Role;
 import com.example.codefellowship.infrastructure.ApplicationUserRepo;
+import com.example.codefellowship.infrastructure.services.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,6 +24,9 @@ import java.util.Date;
 public class authController {
     @Autowired
     ApplicationUserRepo applicationUserRepo;
+
+    @Autowired
+    SecurityService securityService;
 
     @Autowired
     BCryptPasswordEncoder encoder;
@@ -46,6 +51,8 @@ public class authController {
         SimpleDateFormat formatter2 = new SimpleDateFormat("yyyy-MM-dd");
         Date date=formatter2.parse(dateOfBirth);
         ApplicationUser newApplicationUser = new ApplicationUser(encoder.encode(password),username,firstName,lastName,bio,date);
+
+        newApplicationUser.setRole(securityService.findRoleByName("USER"));
         newApplicationUser = applicationUserRepo.save(newApplicationUser);
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(newApplicationUser, null, new ArrayList<>());
