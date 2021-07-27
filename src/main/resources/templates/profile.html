@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
     <title>Profile Page</title>
@@ -15,6 +16,7 @@
 <body>
 <nav th:replace="fragments/navbar.html :: header"> </nav>
 <!--<header>-->
+
     <div class="container">
         <div class="row" th:if="${showError == true}">
             <div class="alert alert-danger" role="alert" th:text="${errorPassword}">
@@ -30,7 +32,7 @@
             <div class="col profile-image">
                 <img src="../static/images/profile.png" th:src="@{/images/profile.png}" th:alt="${username}" alt="">
                 <p th:text="${username}"></p>
-                <div th:if="${showPostForm}">
+                <div th:if="${isAuthorized}">
                     <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Edit Profile</button>
                     <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal2">Change Password</button>
                 </div>
@@ -71,8 +73,16 @@
     </div>
 </main>
 <main th:unless="${posts.size() > 0}">
-    <p>There are no posts yet<span th:if="${showPostForm}">, You can write a post by filling in the form above</span><span th:unless="${showPostForm}">.</span>
+    <p>There are no posts yet<span th:if="${isAuthorized}">, You can write a post by filling in the form above</span><span th:unless="${isAuthorized}">.</span>
     </p>
+<!--    <span sec:authentication="principal.authorities">Roles</span>-->
+<!--    <div sec:authorize="hasAuthority('ADMIN')">-->
+<!--        This content is only shown to administrators.-->
+<!--    </div>-->
+
+<!--    <div sec:authorize="hasAuthority('USER')">-->
+<!--        This content is only shown to users.-->
+<!--    </div>-->
 </main>
 <footer th:replace="fragments/footer.html :: footer"> </footer>
 

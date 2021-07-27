@@ -11,7 +11,9 @@ public class Post{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(columnDefinition="TEXT")
     private String body;
+
     private Date date;
 
     @ManyToOne
