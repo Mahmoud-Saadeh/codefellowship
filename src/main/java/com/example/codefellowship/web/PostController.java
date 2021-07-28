@@ -10,10 +10,16 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.view.RedirectView;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class PostController {
@@ -49,5 +55,34 @@ public class PostController {
         postRepo.save(post);
 
         return new RedirectView("/myprofile");
+    }
+
+    @GetMapping("/feed")
+    public String getFeed(Model model){
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        ApplicationUser currentUser = applicationUserRepo.findApplicationUserByUsername(userDetails.getUsername());
+
+        List<Post> posts = postRepo.findAll();
+
+        List<Post> filteredPost = new ArrayList<>();
+        List<List> filteredPosts = new ArrayList<>();
+
+        for (ApplicationUser us: currentUser.getFollowing()) {
+            System.out.println(us.getId());
+            filteredPost = (posts.stream().filter(post -> post.getApplicationUser().getId().equals(us.getId())).collect(Collectors.toList()));
+            filteredPosts.add(filteredPost);
+        }
+
+        List<Post> sortedFilteredPosts = new ArrayList<>();
+        for (List li: filteredPosts) {
+            for (Object po:  li) {
+                sortedFilteredPosts.add(((Post) po));
+            }
+        }
+        sortedFilteredPosts.sort((o1,o2) -> o2.getDate().compareTo(o1.getDate()));
+
+        model.addAttribute("posts", sortedFilteredPosts);
+
+        return "feed";
     }
 }

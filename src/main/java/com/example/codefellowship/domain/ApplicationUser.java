@@ -38,6 +38,20 @@ public class ApplicationUser implements UserDetails {
     private Set<Role> roles = new HashSet<>();
 
 
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name="UserRel",
+            joinColumns={@JoinColumn(name="UserId")},
+            inverseJoinColumns={@JoinColumn(name="ParentId")})
+    private Set<ApplicationUser> following = new HashSet<>();
+
+    //    @ManyToMany(cascade = CascadeType.ALL)
+//    @JoinTable(name="UserRel",
+//            joinColumns={@JoinColumn(name="ParentId")},
+//            inverseJoinColumns={@JoinColumn(name="UserId")})
+
+    @ManyToMany(mappedBy="following")
+    private Set<ApplicationUser> followers = new HashSet<>();
+
     public ApplicationUser() {
     }
 
@@ -48,6 +62,33 @@ public class ApplicationUser implements UserDetails {
         this.lastName = lastName;
         this.bio = bio;
         this.dateOfBirth = dateOfBirth;
+    }
+
+    public Set<ApplicationUser> getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(Set<ApplicationUser> followers) {
+        this.followers = followers;
+    }
+
+    public Set<ApplicationUser> getFollowing() {
+        return following;
+    }
+
+    public void setFollowing(Set<ApplicationUser> following) {
+        this.following = following;
+    }
+
+    public void addFollowing(ApplicationUser user){
+        this.following.add(user);
+    }
+    public void addFollower(ApplicationUser user){
+        this.followers.add(user);
+    }
+
+    public void deleteFollowing(ApplicationUser user){
+        this.following.remove(user);
     }
 
     public List<Post> getPosts() {
