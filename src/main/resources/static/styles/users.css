@@ -1,24 +1,24 @@
-main{
-    display: flex;
-    flex-wrap: wrap;
-    margin: 50px auto;
-    justify-content: space-between;
-    min-height: 600px;
-}
+/*.users-list{*/
+/*    display: flex;*/
+/*    flex-wrap: wrap;*/
+/*    margin: 50px auto;*/
+/*    justify-content: space-between;*/
+/*    !*min-height: 600px;*!*/
+/*}*/
 
-main div{
-    margin: 50px auto;
-}
+/*.users-list div{*/
+/*    margin: 50px auto;*/
+/*}*/
 
-main div a{
+.users-list div a{
     text-decoration: none;
     color: #333333;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    /*justify-content: space-between;*/
     font-size: 20px;
 }
-main div a img{
+.users-list div a img{
     width: 70px;
     height: 70px;
     border-radius: 50%;

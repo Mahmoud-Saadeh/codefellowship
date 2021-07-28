@@ -15,19 +15,23 @@
 <body>
     <nav th:replace="fragments/navbar.html :: header"> </nav>
 
-    <main th:if="${users.size() > 0}">
+    <div class="container users-list" th:if="${users.size() > 0}">
+        <div class="row justify-content-md-center">
+            <div class="col-sm-4 col-lg-3" th:each="user : ${users}">
 
-            <div th:each="user : ${users}">
-                <a th:href="'/user/' + ${user.id}">
-                    <span><img src="../static/images/profile.png" th:src="@{/images/profile.png}" th:alt="${user.firstName}" alt=""></span>
-                    <span th:text="${user.firstName} + ' ' + ${user.lastName}"></span>
-                </a>
+                    <a th:href="'/user/' + ${user.id}">
+                        <span><img src="../static/images/profile.png" th:src="@{/images/profile.png}" th:alt="${user.firstName}" alt=""></span>
+                        <span th:text="${user.firstName} + ' ' + ${user.lastName}"></span>
+                    </a>
+
             </div>
-
-    </main>
-    <main th:unless="${users.size() > 0}">
-        <p>There are no users yet, You can signup from <a href="/signup">here</a></p>
-    </main>
+        </div>
+    </div>
+    <div class="container users-list" th:unless="${users.size() > 0}">
+        <div class="row justify-content-md-center">
+            <p>There are no users yet, You can signup from <a href="/signup">here</a></p>
+        </div>
+    </div>
 
     <footer th:replace="fragments/footer.html :: footer"> </footer>
 </body>

@@ -2,11 +2,8 @@ package com.example.codefellowship.web;
 
 import com.example.codefellowship.domain.ApplicationUser;
 import com.example.codefellowship.domain.Post;
-import com.example.codefellowship.infrastructure.ApplicationUserRepo;
-import com.example.codefellowship.infrastructure.PostRepo;
 import com.example.codefellowship.infrastructure.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,7 +17,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -43,15 +39,17 @@ public class UserController {
 
         ApplicationUser applicationUser = userService.findApplicationUserByUsername(userDetails.getUsername());
 
-        return profileData(model, applicationUser, true, applicationUser.getId(), true);
+        return profileData(model, applicationUser, true, applicationUser.getId(), true, applicationUser);
     }
 
-    private String profileData(ModelMap model, ApplicationUser applicationUser, boolean isAuthorized , Long id, boolean showPostForm) {
+    private String profileData(ModelMap model, ApplicationUser applicationUser, boolean isAuthorized , Long id, boolean showPostForm, ApplicationUser currentUser) {
         SimpleDateFormat formatter2 = new SimpleDateFormat("yyyy-MM-dd");
         String formattedDate = formatter2.format(applicationUser.getDateOfBirth());
 
         List<Post> posts = applicationUser.getPosts();
         posts.sort((o1,o2) -> o2.getDate().compareTo(o1.getDate()));
+
+        boolean isFollowing = currentUser.getFollowing().contains(userService.findById(id));
 
         model.addAttribute("username", applicationUser.getUsername());
         model.addAttribute("firstName", applicationUser.getFirstName());
@@ -63,6 +61,7 @@ public class UserController {
         model.addAttribute("showPostForm", showPostForm);
         model.addAttribute("posts", posts);
         model.addAttribute("id", id);
+        model.addAttribute("isFollowing", isFollowing);
         return "profile";
     }
 
@@ -93,7 +92,7 @@ public class UserController {
             }
         }
 
-        return profileData(model, applicationUser, isAuthorized, passedId, false);
+        return profileData(model, applicationUser, isAuthorized, passedId, applicationUser.getId().equals(currentUser.getId()), currentUser);
     }
 
     @PostMapping("/edituser/{id}")
@@ -114,13 +113,7 @@ public class UserController {
         Date date=formatter2.parse(dateOfBirth);
         applicationUser.setDateOfBirth(date);
 
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        ApplicationUser currentUser = userService.findApplicationUserByUsername(userDetails.getUsername());
-
-        if (currentUser.getId().equals(applicationUser.getId())){
-            Authentication authentication = new UsernamePasswordAuthenticationToken(applicationUser, null, new ArrayList<>());
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-        }
+        saveContext(applicationUser);
 
 
         userService.save(applicationUser);
@@ -148,6 +141,11 @@ public class UserController {
         applicationUser.setPassword(encoder.encode(newPassword));
         userService.save(applicationUser);
 
+        saveContext(applicationUser);
+        return redirectView;
+    }
+
+    private void saveContext(ApplicationUser applicationUser) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         ApplicationUser currentUser = userService.findApplicationUserByUsername(userDetails.getUsername());
 
@@ -155,9 +153,40 @@ public class UserController {
             Authentication authentication = new UsernamePasswordAuthenticationToken(applicationUser, null, new ArrayList<>());
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
-        return redirectView;
     }
 
+    @PostMapping("/follow/{id}")
+    public RedirectView followUser(@PathVariable Long id, RedirectAttributes redir){
+        ApplicationUser applicationUser = userService.findById(id);
+
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        ApplicationUser currentUser = userService.findApplicationUserByUsername(userDetails.getUsername());
+
+//        applicationUser.addFollower(currentUser);
+
+        currentUser.addFollowing(applicationUser);
+
+        userService.save(currentUser);
+//        userService.save(applicationUser);
+
+        for (ApplicationUser us : currentUser.getFollowing()) {
+            System.out.println(us.getFirstName() + "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        }
+
+        return new RedirectView("/user/" + id);
+    }
+    @PostMapping("/unfollow/{id}")
+    public RedirectView unFollowUser(@PathVariable Long id, RedirectAttributes redir){
+        ApplicationUser applicationUser = userService.findById(id);
+
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        ApplicationUser currentUser = userService.findApplicationUserByUsername(userDetails.getUsername());
+
+        currentUser.deleteFollowing(applicationUser);
+        userService.save(currentUser);
+
+        return new RedirectView("/user/" + id);
+    }
     @GetMapping("/access-denied")
     public String getAccessDenied() {
         return "/403";

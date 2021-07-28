@@ -28,13 +28,20 @@
                 Your password has been changed.
             </div>
         </div>
+<!--        th:if="${evaluation &lt; 49 and evaluation &gt; 29}"-->
         <div class="row">
             <div class="col profile-image">
                 <img src="../static/images/profile.png" th:src="@{/images/profile.png}" th:alt="${username}" alt="">
                 <p th:text="${username}"></p>
-                <div th:if="${isAuthorized}">
-                    <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Edit Profile</button>
-                    <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal2">Change Password</button>
+                <div>
+                    <form style="display: inline" th:if="${!showPostForm eq true and isFollowing eq true}" method="POST" th:action="@{'/unfollow/' + ${id}}">
+                        <button type="submit" class="btn btn-success btn-sm">Unfollow</button>
+                    </form>
+                    <form style="display: inline" th:if="${!showPostForm eq true and (isFollowing eq null or isFollowing eq false)}" method="POST" th:action="@{'/follow/' + ${id}}">
+                        <button type="submit" class="btn btn-success btn-sm">follow</button>
+                    </form>
+                    <button th:if="${isAuthorized}" type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Edit Profile</button>
+                    <button th:if="${isAuthorized}" type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal2">Change Password</button>
                 </div>
             </div>
             <div class="col">
@@ -64,26 +71,51 @@
 <div th:replace="fragments/modals.html :: editProfileModal(id=${id})"> </div>
 <div th:replace="fragments/modals.html :: changePassword(id=${id})"> </div>
 
-<main th:if="${posts.size() > 0}">
-    <div class="card" style="width: 18rem;" th:each="post : ${posts}">
-        <div class="card-body">
-            <p class="card-text" th:text="'Created at: ' +${post.getFormattedDate()}"></p>
-            <p class="card-text" th:text="${post.body}"></p>
+<!--<main th:if="${posts.size() > 0}">-->
+<!--    <div class="card" style="width: 18rem;" th:each="post : ${posts}">-->
+<!--        <div class="card-body">-->
+<!--            <p class="card-text" th:text="'Created at: ' +${post.getFormattedDate()}"></p>-->
+<!--            <p class="card-text" th:text="${post.body}"></p>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</main>-->
+<!--<main th:unless="${posts.size() > 0}">-->
+<!--    <p>There are no posts yet<span th:if="${isAuthorized}">, You can write a post by filling in the form above</span><span th:unless="${isAuthorized}">.</span>-->
+<!--    </p>-->
+<!--&lt;!&ndash;    <span sec:authentication="principal.authorities">Roles</span>&ndash;&gt;-->
+<!--&lt;!&ndash;    <div sec:authorize="hasAuthority('ADMIN')">&ndash;&gt;-->
+<!--&lt;!&ndash;        This content is only shown to administrators.&ndash;&gt;-->
+<!--&lt;!&ndash;    </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;    <div sec:authorize="hasAuthority('USER')">&ndash;&gt;-->
+<!--&lt;!&ndash;        This content is only shown to users.&ndash;&gt;-->
+<!--&lt;!&ndash;    </div>&ndash;&gt;-->
+<!--</main>-->
+
+<div class="container" th:if="${posts.size() > 0}">
+    <div class="row justify-content-md-center">
+        <div class="col-sm-4 col-lg-3" th:each="post : ${posts}">
+            <div class="card" style="width: 18rem;" >
+                <div class="card-header post-header" >
+                    <span><img src="../static/images/profile.png" th:src="@{/images/profile.png}" th:alt="${post.getApplicationUser().getFirstName()}" alt=""></span>
+                    <a th:href="${'/user/' + post.getApplicationUser().getId()}">
+                        <span th:text="${post.getApplicationUser().getFirstName() + ' ' + post.getApplicationUser().getLastName()}" ></span>
+                    </a>
+                </div>
+                <div class="card-body">
+                    <p class="card-text" th:text="'Created at: ' +${post.getFormattedDate()}"></p>
+                    <p class="card-text" th:text="${post.body}"></p>
+                </div>
+            </div>
         </div>
     </div>
-</main>
-<main th:unless="${posts.size() > 0}">
-    <p>There are no posts yet<span th:if="${isAuthorized}">, You can write a post by filling in the form above</span><span th:unless="${isAuthorized}">.</span>
-    </p>
-<!--    <span sec:authentication="principal.authorities">Roles</span>-->
-<!--    <div sec:authorize="hasAuthority('ADMIN')">-->
-<!--        This content is only shown to administrators.-->
-<!--    </div>-->
+</div>
 
-<!--    <div sec:authorize="hasAuthority('USER')">-->
-<!--        This content is only shown to users.-->
-<!--    </div>-->
-</main>
+<div class="container" th:unless="${posts.size() > 0}">
+    <div class="row justify-content-md-center">
+        <p>There are no posts yet.</p>
+    </div>
+</div>
 <footer th:replace="fragments/footer.html :: footer"> </footer>
 
 </body>
