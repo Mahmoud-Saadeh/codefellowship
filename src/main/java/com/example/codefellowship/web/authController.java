@@ -53,6 +53,7 @@ public class authController {
         ApplicationUser newApplicationUser = new ApplicationUser(encoder.encode(password),username,firstName,lastName,bio,date);
 
         newApplicationUser.setRole(securityService.findRoleByName("USER"));
+        newApplicationUser.addFollowing(newApplicationUser);
         newApplicationUser = applicationUserRepo.save(newApplicationUser);
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(newApplicationUser, null, new ArrayList<>());
